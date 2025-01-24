@@ -6,7 +6,7 @@ export const AuthProvider = ({ children, config }) => {
   const [tokens, setTokens] = useState(null);
   const [userName, setUserName] = useState("");
 
-  // Cargar tokens desde localStorage
+  // Load tokens from localStorage
   useEffect(() => {
     const storedIdToken = localStorage.getItem("id_token");
     const storedAccessToken = localStorage.getItem("access_token");
@@ -21,16 +21,16 @@ export const AuthProvider = ({ children, config }) => {
   const handleLogout = () => {
     const { clientId, cognitoDomain, redirectUri } = config;
 
-    // Limpiar localStorage
+    // Clear localStorage
     localStorage.removeItem("id_token");
     localStorage.removeItem("access_token");
     localStorage.removeItem("user_name");
 
-    // Limpiar el estado
+    // Clear the state
     setTokens(null);
     setUserName("");
 
-    // Redirigir al logout
+    // Redirect to logout
     const logoutUrl = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(
       redirectUri
     )}`;
