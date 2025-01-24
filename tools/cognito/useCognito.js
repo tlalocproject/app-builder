@@ -35,7 +35,7 @@ export const useCognito = (setTokens, setUserName, config) => {
             setTokens({ idToken: data.id_token, accessToken: data.access_token });
             setUserName(userName);
 
-            // Limpiar la URL
+            //Clear the URL
             window.history.replaceState({}, document.title, "/");
           }
         })
