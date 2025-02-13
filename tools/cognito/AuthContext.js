@@ -5,16 +5,19 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children, config }) => {
   const [tokens, setTokens] = useState(null);
   const [userName, setUserName] = useState("");
+  const [userSub, setUserSub] = useState("");
 
   // Load tokens from localStorage
   useEffect(() => {
     const storedIdToken = localStorage.getItem("id_token");
     const storedAccessToken = localStorage.getItem("access_token");
     const storedUserName = localStorage.getItem("user_name");
+    const storedUserSub = localStorage.getItem("user_sub");
 
     if (storedIdToken && storedAccessToken) {
       setTokens({ idToken: storedIdToken, accessToken: storedAccessToken });
       setUserName(storedUserName || "");
+      setUserSub(storedUserSub || "");
     }
   }, []);
 
@@ -25,6 +28,7 @@ export const AuthProvider = ({ children, config }) => {
     localStorage.removeItem("id_token");
     localStorage.removeItem("access_token");
     localStorage.removeItem("user_name");
+    localStorage.removeItem("user_sub");
 
     // Clear the state
     setTokens(null);
@@ -38,7 +42,7 @@ export const AuthProvider = ({ children, config }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ tokens, userName, setTokens, setUserName, handleLogout }}>
+    <AuthContext.Provider value={{ tokens, userName, userSub, setTokens, setUserName, handleLogout }}>
       {children}
     </AuthContext.Provider>
   );

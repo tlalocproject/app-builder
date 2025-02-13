@@ -27,10 +27,12 @@ export const useCognito = (setTokens, setUserName, config) => {
           if (data.id_token && data.access_token) {
             const decodedToken = jwtDecode(data.id_token);
             const userName = decodedToken.name || decodedToken.email;
+            const userSub = decodedToken.sub;
 
             localStorage.setItem("id_token", data.id_token);
             localStorage.setItem("access_token", data.access_token);
             localStorage.setItem("user_name", userName);
+            localStorage.setItem("user_sub", userSub);
 
             setTokens({ idToken: data.id_token, accessToken: data.access_token });
             setUserName(userName);
