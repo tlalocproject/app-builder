@@ -2,17 +2,17 @@
 
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export', // This will make our build static
+  output: 'export',
   images: {
-    unoptimized: true, // Image optimization is disabled in static builds
+    unoptimized: true,
   },
-  // distDir: 'build', // This will be the output directory
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg)$/i,
-      type: "asset/resource",
-      generator: {
-        filename: "static/assets/[hash][ext]",
+      loader: 'url-loader',
+      options: {
+        limit: 8192,
+        name: 'static/assets/[name].[hash].[ext]',
       },
     });
     return config;
