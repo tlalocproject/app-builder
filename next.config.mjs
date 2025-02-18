@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 
+import additional from './src/additional.next.config.mjs';
+
 const nextConfig = {
   reactStrictMode: true,
-  basePath: '/B000000',
   output: 'export',
   images: {
     unoptimized: true,
@@ -18,5 +19,6 @@ const nextConfig = {
     });
     return config;
   },
+  ...additional
 };
 export default nextConfig;
