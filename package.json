@@ -7,9 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "preinstall": "./scripts/preinstall.py",
-    "postinstall": "./scripts/postinstall.sh"
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "^15.1.7",
