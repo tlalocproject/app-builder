@@ -22,7 +22,7 @@ if os.path.exists(".pipeline"):
             json_content = file.read()
         json_content = json_content.replace(
             "git+ssh://git@github.com-weelock",
-            f"git+https://weelock-root:{os.getenv("GITHUB_TOKEN")}@github.com",
+            f'git+https://weelock-root:{os.getenv("GITHUB_TOKEN")}@github.com',
         )
         with open(package_file, "w") as file:
             file.write(json_content)
@@ -43,7 +43,7 @@ if os.path.exists(".pipeline"):
         with open(package_file, "r") as file:
             json_content = file.read()
         json_content = json_content.replace(
-            f"git+https://weelock-root:{os.getenv("GITHUB_TOKEN")}@github.com",
+            f'git+https://weelock-root:{os.getenv("GITHUB_TOKEN")}@github.com',
             "git+ssh://git@github.com-weelock",
         )
         with open(package_file, "w") as file:
