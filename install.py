@@ -1,29 +1,31 @@
 #!/bin/env python3
 
-# Pre install #####################################################################
-# Creating .npmrc
-
+import json
 import os
 
-npmrc_content = ""
-if os.path.exists("./.pipeline"):
-    npmrc_content = f'//npm.pkg.github.com/:_authToken={os.getenv("GITHUB_TOKEN")}"\n@weelock-root:registry=https://npm.pkg.github.com"'
-else:
-    npmrc_content = '@weelock-root:registry=git+ssh://git@github.com-weelock/weelock-root'
-with open("./.npmrc", "w") as npmrc:
-    npmrc.write(npmrc_content)
+# Pre install #####################################################################
+
+# Moving package-lock.json
+os.system("cp src/package-lock.json package-lock.json")
 
 # Integrating extra packages
-
-import json
-
 package = json.load(open("./package.json"))
 extra = json.load(open("./src/package-extra.json"))
-
 package["dependencies"] = {**package["dependencies"], **extra["dependencies"]}
 package["devDependencies"] = {**package["devDependencies"], **extra["devDependencies"]}
-
 json.dump(package, open("./package.json", "w"), indent=2)
+
+# Replacing git+ssh with git+https
+if os.path.exists(".pipeline"):
+    for package_file in ["package.json", "package-lock.json"]:
+        with open(package_file, "r") as file:
+            json_content = file.read()
+        json_content = json_content.replace(
+            "git+ssh://git@github.com-weelock",
+            f"git+https://weelock-root:{os.getenv("GITHUB_TOKEN")}@github.com",
+        )
+        with open(package_file, "w") as file:
+            file.write(json_content)
 
 # Install #########################################################################
 
@@ -35,8 +37,20 @@ else:
 
 # Post install ####################################################################
 
-# Delete .npmrc
-os.remove("./.npmrc")
+# Restoring package-lock.json
+if os.path.exists(".pipeline"):
+    for package_file in ["package.json", "package-lock.json"]:
+        with open(package_file, "r") as file:
+            json_content = file.read()
+        json_content = json_content.replace(
+            f"git+https://weelock-root:{os.getenv("GITHUB_TOKEN")}@github.com",
+            "git+ssh://git@github.com-weelock",
+        )
+        with open(package_file, "w") as file:
+            file.write(json_content)
+
+# Rescue package-lock.json
+os.system("mv package-lock.json src/package-lock.json")
 
 # Restoring package.json using git
 os.system("git checkout -- package.json")
